@@ -1,0 +1,3 @@
+include ':pageMenuLibrary'
+include ':app'
+rootProject.name = "PageMenuLayout"
