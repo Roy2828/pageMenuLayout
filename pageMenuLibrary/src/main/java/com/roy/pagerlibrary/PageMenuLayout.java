@@ -124,7 +124,6 @@ public class PageMenuLayout<T> extends RelativeLayout {
             adapter = new PageViewPagerAdapter(viewList);
             mViewPager.setAdapter(adapter);
         }
-        mViewPager.setCurrentItem(0);
         adapter.updateSetChange(viewList);
     }
 
