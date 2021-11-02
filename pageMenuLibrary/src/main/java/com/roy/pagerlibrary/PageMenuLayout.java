@@ -7,18 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.roy.pagerlibrary.adapter.EntranceAdapter;
 import com.roy.pagerlibrary.adapter.PageViewPagerAdapter;
 import com.roy.pagerlibrary.holder.PageMenuViewHolderCreator;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 public class PageMenuLayout<T> extends RelativeLayout {
     private static final int DEFAULT_ROW_COUNT = 2;
@@ -125,7 +125,7 @@ public class PageMenuLayout<T> extends RelativeLayout {
             mViewPager.setAdapter(adapter);
         }
         mViewPager.setCurrentItem(0);
-        adapter.notifyDataSetChanged();
+        adapter.updateSetChange(viewList);
     }
 
 
