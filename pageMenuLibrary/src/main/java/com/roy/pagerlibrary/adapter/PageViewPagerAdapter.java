@@ -3,65 +3,68 @@ package com.roy.pagerlibrary.adapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.viewpager.widget.PagerAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 public class PageViewPagerAdapter extends PagerAdapter {
 
-    private List<View> mViewList;
-    private boolean isCanLoop;
+    private final List<View> mViewList = new ArrayList<>();
 
-    public PageViewPagerAdapter(List<View> viewList, boolean isCanLoop) {
-        this.mViewList = viewList;
-        this.isCanLoop = isCanLoop;
-        if (viewList == null) {
-            mViewList = new ArrayList<>();
+    public PageViewPagerAdapter(List<View> objects) {
+        if (objects != null) {
+            this.mViewList.addAll(objects);
         }
-    }
-
-    public PageViewPagerAdapter(List<View> viewList) {
-        this.mViewList = viewList;
-        if (viewList == null) {
-            mViewList = new ArrayList<>();
-        }
-    }
-
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-      //  container.removeView(mViewList.get( position % mViewList.size()));
-        ((ViewPager)container).removeView((View)object);
-    }
-
-    @NonNull
-    @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        int realPosition = position % mViewList.size();
-        View view = mViewList.get(realPosition);
-
-        container.addView(view);
-        return view;
     }
 
     @Override
     public int getCount() {
-        if (mViewList.isEmpty()) {
-            return 0;
-        }
         return mViewList.size();
     }
 
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+    public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        int idx = mViewList.indexOf(object);
+        return idx == -1 ? POSITION_NONE : idx;
+    }
 
     @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
+    public View instantiateItem(ViewGroup container, int position) {
+        View item = mViewList.get(position % mViewList.size());
+
+        final int id = generateViewIdForItem(item);
+
+        item.setId(id);
+        container.addView(item);
+
+        return item;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+
+        final int id = generateViewIdForItem((View)object);
+        View view = container.findViewById(id);
+        if (view != null) {
+            container.removeView(view);
+        }
+    }
+
+    public void updateSetChange(List<View> objects) {
+        this.mViewList.clear();
+        if (objects != null) {
+            this.mViewList.addAll(objects);
+        }
+        notifyDataSetChanged();
+    }
+
+    private static int generateViewIdForItem(View item) {
+        return Math.abs(item.hashCode());
     }
 }
